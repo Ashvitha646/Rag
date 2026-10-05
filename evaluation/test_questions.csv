@@ -1,0 +1,11 @@
+question,expected_paper
+"What is the main idea of the Transformer architecture?","attention_is_all_you_need"
+"How does self-attention work in the Transformer?","attention_is_all_you_need"
+"How does BERT use bidirectional representations?","bert"
+"What is the pre-training approach used by BERT?","bert"
+"What is the main purpose of GPT-3?","gpt3"
+"How does GPT-3 perform few-shot learning?","gpt3"
+"What problem does LoRA address?","lora"
+"How does LoRA reduce the number of trainable parameters?","lora"
+"What is Retrieval-Augmented Generation?","rag"
+"How does RAG combine retrieval with text generation?","rag"

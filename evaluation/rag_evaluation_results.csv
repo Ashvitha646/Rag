@@ -1,0 +1,44 @@
+question,expected_paper,answer,correct_paper_retrieved
+What is the main idea of the Transformer architecture?,attention_is_all_you_need,"The Transformer’s core idea is to replace recurrent or convolutional layers with an **attention‑only** mechanism.  
+It uses stacked encoder and decoder layers, each consisting of a multi‑head self‑attention sub‑layer followed by a position‑wise feed‑forward network. Residual connections and layer normalization are applied around each sub‑layer, and all components share the same dimensionality (e.g., 512). This design lets the model compute representations for all positions in parallel, capturing global dependencies efficiently and enabling faster training and state‑of‑the‑art performance in sequence tasks.  
+
+[Source 2] [Source 3]",True
+How does self-attention work in the Transformer?,attention_is_all_you_need,"Self‑attention (also called intra‑attention) lets each position in a sequence look at every other position to build a richer representation.  
+In the Transformer this is done in two places:
+
+1. **Encoder self‑attention** – every token’s query, key and value vectors come from the same encoder layer. Each position can attend to all positions in the previous encoder layer, producing a context‑aware representation for that position.  
+   *[Source 1]*
+
+2. **Decoder self‑attention** – similar to the encoder, but the attention is masked so that a position can only attend to itself and earlier positions. This preserves the auto‑regressive property. The masking is implemented by setting the softmax inputs for illegal connections to \(-\infty\).  
+   *[Source 3]*
+
+The attention scores are computed with a scaled dot‑product between queries and keys, then weighted sums of the values give the output for each position. This mechanism allows the model to capture dependencies across the entire sequence in a single, parallelizable operation.",True
+How does BERT use bidirectional representations?,bert,"BERT learns representations that look at both the left and right context of every token.  
+During pre‑training it uses a **masked language model (MLM)**: some tokens are hidden and the model must predict them while having access to the entire sentence. Because the Transformer’s self‑attention lets each layer attend to all positions, the hidden state for a token is influenced by words on both sides. This gives BERT a *deep bidirectional* representation.  
+Additionally, BERT trains a **next‑sentence prediction** task that jointly conditions on two sentences, further encouraging the model to capture relationships across sentence boundaries.  
+
+Thus, BERT’s bidirectional representations come from its MLM objective and self‑attention layers that fuse left‑ and right‑side context in every layer.  
+
+[Source 1] [Source 2]",True
+What is the pre-training approach used by BERT?,bert,"BERT is pre‑trained with a bi‑directional Transformer that learns two tasks:
+
+1. **Masked Language Modeling (MLM)** – random tokens in a sentence are replaced with a special `[MASK]` token and the model predicts the original token.  
+2. **Next Sentence Prediction (NSP)** – the model learns whether a second sentence follows the first in the original text.
+
+These two pre‑training tasks give BERT its bi‑directional context understanding.  
+[Source 1] [Source 3]",True
+What is the main purpose of GPT-3?,gpt3,I could not find enough information in the indexed research papers.,True
+How does GPT-3 perform few-shot learning?,gpt3,"GPT‑3’s few‑shot learning is mixed.  
+- It improves markedly from zero‑shot on many tasks, but on some benchmarks (e.g., OpenBookQA) it still lags the best‑in‑class models by over 20 points, while on others it matches a fine‑tuned BERT Large baseline [Source 1].  
+- In “in‑context” settings it shows one‑shot and few‑shot proficiency on rapid‑adaptation tasks such as word unscrambling, arithmetic, and using newly defined words in a sentence, and can even generate synthetic news articles that humans find hard to distinguish from real ones [Source 2].  
+- However, few‑shot performance drops on harder tasks like natural‑language inference (ANLI) and certain reading‑comprehension datasets (RACE, QuAC) [Source 2].  
+- There is also uncertainty whether GPT‑3 is truly learning new tasks from scratch at inference time or simply recognizing tasks it has seen during pre‑training; this varies by task type [Source 3].",True
+What problem does LoRA address?,lora,"LoRA tackles the inefficiency of adapting very large pretrained models to new tasks.  
+It reduces the number of trainable parameters (by up to 10,000×), cuts GPU memory usage, and introduces **no extra inference latency** while still matching or surpassing full fine‑tuning performance. This makes quick task‑switching possible by sharing almost all of the model’s parameters [Source 1], [Source 2].",True
+How does LoRA reduce the number of trainable parameters?,lora,"LoRA reduces the number of trainable parameters by replacing the full weight matrices in a Transformer with a low‑rank decomposition that is added in parallel to the frozen pretrained weights.  
+- The original weight matrix \(W\) (e.g., \(W_q\) or \(W_v\)) is kept fixed.  
+- Two small matrices \(A\) and \(B\) of size \(d_{\text{model}}\times r\) and \(r\times d_{\text{model}}\) are introduced, where \(r\) is a chosen rank much smaller than \(d_{\text{model}}\).  
+- Only the parameters in \(A\) and \(B\) are trained, so the total trainable parameters for each adapted matrix are \(2 \times d_{\text{model}}\times r\).  
+- Because \(r \ll d_{\text{model}}\), this yields a dramatic reduction (up to 10,000× fewer trainable parameters) compared to fine‑tuning the full weight matrix [Source 1, Source 3].",True
+What is Retrieval-Augmented Generation?,rag,"Retrieval‑Augmented Generation (RAG) is a framework that combines a pre‑trained parametric language model (a seq2seq transformer) with a non‑parametric memory of external documents. The model retrieves relevant passages from a dense vector index (e.g., Wikipedia) using a neural retriever, then conditions its generation on those passages. During training the retrieval and generation components are fine‑tuned end‑to‑end, allowing the system to generate text that is informed by up‑to‑date external knowledge and can provide provenance for its outputs. [Source 1], [Source 2], [Source 3]",True
+How does RAG combine retrieval with text generation?,rag,"RAG first retrieves relevant passages from a large non‑parametric memory (e.g., a dense vector index of Wikipedia) using a pre‑trained neural retriever. It then feeds those passages into a pre‑trained seq2seq language model, conditioning the generation on the retrieved text. Two variants exist: one keeps the same retrieved passages for the entire output, while the other can switch to different passages for each token. This way RAG blends retrieval‑based evidence with parametric generation to produce knowledge‑rich text. [Source 2]",True
